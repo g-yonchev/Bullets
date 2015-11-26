@@ -12,7 +12,7 @@
 	public class SmartPlayer : BasePlayer
 	{
 		public override string Name { get; } = "SmartPlayer_" + Guid.NewGuid();
-
+		
 		public override PlayerAction GetTurn(GetTurnContext context)
 		{
 			if (context.RoundType == GameRoundType.PreFlop)
@@ -20,6 +20,7 @@
 				var playHand = HandStrengthValuation.PreFlop(this.FirstCard, this.SecondCard);
 				if (playHand == CardValuationType.Unplayable)
 				{
+					// ako drugiq e purvi i raisne to tuka ne moje da se vlezne. can check = false
 					if (context.CanCheck)
 					{
 						return PlayerAction.CheckOrCall();

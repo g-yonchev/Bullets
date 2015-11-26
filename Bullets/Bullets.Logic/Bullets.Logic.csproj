@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulletPlayer.cs" />
+    <Compile Include="EvaluationAfterNoAction.cs" />
+    <Compile Include="EvaluationAfterOpponentsCall.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,22 +9,49 @@
 
 	public class BulletPlayer : BasePlayer
 	{
+		// these are for testing and printing purpouses.
 		private GetTurnContext context;
 		private readonly List<string> players = new List<string>();
 
 		public override string Name { get; } = $"BulletsPlayer_{Guid.NewGuid()}";
 
+		// logikata koqto e implementiral niki za igrata: pri vsqko pochvane na rund i dvata playera imat raise(1)
 		public override PlayerAction GetTurn(GetTurnContext context)
 		{
 			this.context = context;
 			//this.Print();
-			var action = PlayerAction.Raise(5);
-			return action;
+			//if (context.RoundType == GameRoundType.PreFlop)
+			{
+				//var isCall = context.PreviousRoundActions.ToList().Any(a => !a.PlayerName.Contains("Bullets") && a.Action.Type == PlayerActionType.CheckCall);
+
+				//if (isCall)
+				{
+					// this is coeficient from the tables
+					var raisePerc = EvaluationAfterOpponentsCall.RaisePercentage(this.FirstCard, this.SecondCard);
+
+					// this is returned random number
+					var rand = RandomProvider.Next(0, 10001);
+
+					// this is randomizied coeficient
+					var randFloat = rand / (float)10000;
+					
+					if (randFloat <= raisePerc)
+					{
+						return PlayerAction.Raise(50);
+					}
+					else
+					{
+						return PlayerAction.CheckOrCall();
+					}
+				}
+
+			}
+
+			//return PlayerAction.CheckOrCall();
 		}
 
 		private void Print()
 		{
-			
 			Console.BackgroundColor = ConsoleColor.DarkGreen;
 			Console.Clear();
 			if (players.Count == 0)
@@ -34,6 +61,10 @@
 					players.Add(item.PlayerName.Substring(0, item.PlayerName.Length - 43));
 				}
 			}
+
+			Console.WriteLine();
+			Console.WriteLine();
+
 			Console.WriteLine(string.Join("Vs", players));
 			Console.WriteLine($"MoneyLeft: {context.MoneyLeft} $");
 			Console.WriteLine();
@@ -43,7 +74,7 @@
 			Console.WriteLine();
 			Console.Write($"       ");
 			PrintCards(this.CommunityCards.ToArray());
-			
+
 			Console.WriteLine();
 			Console.WriteLine();
 			Console.WriteLine($"-CanCheck: {context.CanCheck}");
