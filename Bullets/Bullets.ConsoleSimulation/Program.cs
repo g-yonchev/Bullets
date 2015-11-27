@@ -11,22 +11,15 @@
 		{
 			// boi po smart playera :D
 			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
-			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			SimulateGames(new BulletsVsAlwaysCallSimulator());
 		}
 
 		private static void SimulateGames(IGameSimulator gameSimulator)
 		{
 			Console.WriteLine($"Running {gameSimulator.GetType().Name}...");
 
-			var simulationResult = gameSimulator.Simulate(100);
+			var simulationResult = gameSimulator.Simulate(1000);
 
 			Console.WriteLine(simulationResult.SimulationDuration);
 			Console.WriteLine($"Total games: {simulationResult.FirstPlayerWins:0,0} - {simulationResult.SecondPlayerWins:0,0}");

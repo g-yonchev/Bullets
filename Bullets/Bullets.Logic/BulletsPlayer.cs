@@ -22,7 +22,7 @@
 		public override PlayerAction GetTurn(GetTurnContext context)
 		{
 			this.context = context;
-			
+
 			return this.NomalStrategy(context);
 
 			// this is the strategy from smart player. it would be invoke when whe proove that the player is alwayscall. but how?! :D
@@ -88,23 +88,16 @@
 					if (randFloat <= raisePercentage)
 					{
 
-						//var raiseValue = (int)(raisePercentage * 10 + 17);
-						var raiseValue = 1;
-						return PlayerAction.Raise(raiseValue);
+						var raiseValue = (int)(raisePercentage + 1);
+						//var raiseValue = 1;
+						return PlayerAction.Raise(3);
 					}
 
 					var callPercentage = EvaluationAfterNoAction.CallPercentage(this.FirstCard, this.SecondCard);
 
 					if (randFloat <= callPercentage)
 					{
-						if (context.CanCheck)
-						{
-							return PlayerAction.CheckOrCall();
-						}
-						else
-						{
-							return PlayerAction.Fold();
-						}
+						return PlayerAction.CheckOrCall();
 					}
 
 					return PlayerAction.Fold();
