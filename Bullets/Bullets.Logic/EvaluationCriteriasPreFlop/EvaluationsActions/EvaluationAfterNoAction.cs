@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TexasHoldem.Logic.Cards;
 
 namespace Bullets.Logic
 {
 	// http://poker.srv.ualberta.ca/preflop (not action)
 	public static class EvaluationAfterNoAction
 	{
+		private const int MaxCardTypeValue = 14;
+
 		private static readonly float[,] Fold =
 			{
 				{ 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f }, // AA AKs AQs AJs ATs A9s A8s A7s A6s A5s A4s A3s A2s
@@ -59,5 +62,44 @@ namespace Bullets.Logic
                 { 0.9999f, 0.9991f, 0.9983f, 0.9987f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.9988f, 0.9966f }, // A3o K3o Q3o J3o T3o 93o 83o 73o 63o 53o 43o 33 32s
                 { 0.9994f, 0.9991f, 0.9984f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.0000f, 0.9947f } // A2o K2o Q2o J2o T2o 92o 82o 72o 62o 52o 42o 32o 22
             };
+
+		public static float RaisePercentage(Card firstCard, Card secondCard)
+		{
+			var value = firstCard.Suit == secondCard.Suit
+						  ? (firstCard.Type > secondCard.Type
+								 ? Raise[MaxCardTypeValue - (int)firstCard.Type, MaxCardTypeValue - (int)secondCard.Type]
+								 : Raise[MaxCardTypeValue - (int)secondCard.Type, MaxCardTypeValue - (int)firstCard.Type])
+						  : (firstCard.Type > secondCard.Type
+								 ? Raise[MaxCardTypeValue - (int)secondCard.Type, MaxCardTypeValue - (int)firstCard.Type]
+								 : Raise[MaxCardTypeValue - (int)firstCard.Type, MaxCardTypeValue - (int)secondCard.Type]);
+
+			return value;
+		}
+
+		public static float CallPercentage(Card firstCard, Card secondCard)
+		{
+			var value = firstCard.Suit == secondCard.Suit
+						  ? (firstCard.Type > secondCard.Type
+								 ? Call[MaxCardTypeValue - (int)firstCard.Type, MaxCardTypeValue - (int)secondCard.Type]
+								 : Call[MaxCardTypeValue - (int)secondCard.Type, MaxCardTypeValue - (int)firstCard.Type])
+						  : (firstCard.Type > secondCard.Type
+								 ? Call[MaxCardTypeValue - (int)secondCard.Type, MaxCardTypeValue - (int)firstCard.Type]
+								 : Call[MaxCardTypeValue - (int)firstCard.Type, MaxCardTypeValue - (int)secondCard.Type]);
+
+			return value;
+		}
+
+		public static float FoldPercentage(Card firstCard, Card secondCard)
+		{
+			var value = firstCard.Suit == secondCard.Suit
+						  ? (firstCard.Type > secondCard.Type
+								 ? Fold[MaxCardTypeValue - (int)firstCard.Type, MaxCardTypeValue - (int)secondCard.Type]
+								 : Fold[MaxCardTypeValue - (int)secondCard.Type, MaxCardTypeValue - (int)firstCard.Type])
+						  : (firstCard.Type > secondCard.Type
+								 ? Fold[MaxCardTypeValue - (int)secondCard.Type, MaxCardTypeValue - (int)firstCard.Type]
+								 : Fold[MaxCardTypeValue - (int)firstCard.Type, MaxCardTypeValue - (int)secondCard.Type]);
+
+			return value;
+		}
 	}
 }

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bullets.Logic", "Bullets.Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bullets.AIs", "Bullets.AIs\Bullets.AIs.csproj", "{DFC234CA-0F90-40D7-8C68-73DAB4FFB239}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingConsole", "TestingConsole\TestingConsole.csproj", "{7C7A787E-F207-412C-8517-B4BC804503E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DFC234CA-0F90-40D7-8C68-73DAB4FFB239}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFC234CA-0F90-40D7-8C68-73DAB4FFB239}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFC234CA-0F90-40D7-8C68-73DAB4FFB239}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C7A787E-F207-412C-8517-B4BC804503E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C7A787E-F207-412C-8517-B4BC804503E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C7A787E-F207-412C-8517-B4BC804503E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C7A787E-F207-412C-8517-B4BC804503E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@
 
 	public class BulletsVsAlwaysCallSimulator : BaseGameSimulator
 	{
-		private readonly IPlayer firstPlayer = new BulletPlayer();
+		private readonly IPlayer firstPlayer = new BulletsPlayer();
 		private readonly IPlayer secondPlayer = new AlwaysCallPlayer();
 
 		protected override IPlayer GetFirstPlayer()

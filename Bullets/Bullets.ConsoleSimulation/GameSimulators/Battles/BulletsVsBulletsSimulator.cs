@@ -5,8 +5,8 @@
 
 	public class BulletsVsBulletsSimulator : BaseGameSimulator
 	{
-		private readonly IPlayer firstPlayer = new BulletPlayer();
-		private readonly IPlayer secondPlayer = new BulletPlayer();
+		private readonly IPlayer firstPlayer = new BulletsPlayer();
+		private readonly IPlayer secondPlayer = new BulletsPlayer();
 
 		protected override IPlayer GetFirstPlayer()
 		{

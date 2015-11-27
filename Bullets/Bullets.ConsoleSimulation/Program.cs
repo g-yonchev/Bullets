@@ -9,11 +9,16 @@
 	{
 		public static void Main(string[] args)
 		{
-			SimulateGames(new BulletsVsBulletsSimulator());
-			SimulateGames(new BulletsVsAlwaysCallSimulator());
-			SimulateGames(new BulletsVsDummySimulator());
-			SimulateGames(new BulletsVsAlwaysFoldSimulator());
-			SimulateGames(new SmartVsDummySimulator());
+			// boi po smart playera :D
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
 			SimulateGames(new BulletsVsSmartSimulator());
 		}
 
@@ -21,7 +26,7 @@
 		{
 			Console.WriteLine($"Running {gameSimulator.GetType().Name}...");
 
-			var simulationResult = gameSimulator.Simulate(10000);
+			var simulationResult = gameSimulator.Simulate(100);
 
 			Console.WriteLine(simulationResult.SimulationDuration);
 			Console.WriteLine($"Total games: {simulationResult.FirstPlayerWins:0,0} - {simulationResult.SecondPlayerWins:0,0}");
