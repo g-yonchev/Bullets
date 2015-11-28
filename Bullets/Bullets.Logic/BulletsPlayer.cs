@@ -1,6 +1,6 @@
 ﻿namespace Bullets.Logic
 {
-	using AIs.Helpers;
+	using TablesForGoodCards;
 	using EvaluationCriteriasPreFlop.EvaluationsWinnings;
 	using System;
 	using System.Collections.Generic;
@@ -21,49 +21,111 @@
 		// logikata koqto e implementiral niki za igrata: pri vsqko pochvane na rund i dvata playera imat Raise(1..2...3.. increesing)
 		public override PlayerAction GetTurn(GetTurnContext context)
 		{
+			
 			this.context = context;
+
+			return this.SecondStrategy(context);
 
 			return this.NomalStrategy(context);
 
 			// this is the strategy from smart player. it would be invoke when whe proove that the player is alwayscall. but how?! :D
-			return this.StrategyForAlwaysCall(context);
+			//return this.StrategyFromSmartPlayer(context);
 
 		}
 
-		// todo: iznesi logikata ot smart playera v toq proekt.
-		private PlayerAction StrategyForAlwaysCall(GetTurnContext context)
+		private PlayerAction SecondStrategy(GetTurnContext context)
 		{
-			if (context.RoundType == GameRoundType.PreFlop)
+			var roundType = context.RoundType;
+
+			if (roundType == GameRoundType.PreFlop)
 			{
-				var playHand = HandStrengthValuation.PreFlop(this.FirstCard, this.SecondCard);
-				if (playHand == CardValuationType.Unplayable)
-				{
-					// ako drugiq e purvi i raisne to tuka ne moje da se vlezne. can check = false
-					if (context.CanCheck)
-					{
-						return PlayerAction.CheckOrCall();
-					}
-					else
-					{
-						return PlayerAction.Fold();
-					}
-				}
+				// pre-flop
+				return this.PreFlopAction(context);
+			}
+			else if (roundType == GameRoundType.Flop)
+			{
+				// flop
+				return this.FlopAction(context);
+			}
+			else if (roundType == GameRoundType.Turn)
+			{
+				// turn
+				return this.TurnAction(context);
+			}
+			else
+			{
+				// river
+				return this.RiverAction(context);
+			}
+		}
 
-				if (playHand == CardValuationType.Risky)
-				{
-					var smallBlindsTimes = RandomProvider.Next(1, 8);
-					return PlayerAction.Raise(context.SmallBlind * smallBlindsTimes);
-				}
+		private PlayerAction PreFlopAction(GetTurnContext context)
+		{
+			CardValuationType playHand;
 
-				if (playHand == CardValuationType.Recommended)
-				{
-					var smallBlindsTimes = RandomProvider.Next(6, 14);
-					return PlayerAction.Raise(context.SmallBlind * smallBlindsTimes);
-				}
+			// promenliva koqto pazi dali nie sme bili purvi ( ima samo dva raise v actionite)
+			bool isOurTurn = context.PreviousRoundActions.Count % 2 == 0;
+			
+			if (context.MoneyLeft <= 500)
+			{
+				playHand = HandStrengthValuation.PreFlopLessThan500Money(this.FirstCard, this.SecondCard);
 
-				return PlayerAction.CheckOrCall();
+				if (playHand == CardValuationType.Playable || playHand == CardValuationType.BesthHand)
+				{
+					return PlayerAction.Raise(context.MoneyLeft + 1);
+				}
+            }
+			else if (context.MoneyLeft >= 1500)
+			{
+				playHand = HandStrengthValuation.PreFlopGreaterThan500Money(this.FirstCard, this.SecondCard);
+
+				if (playHand == CardValuationType.Playable || playHand == CardValuationType.BesthHand)
+				{
+					return PlayerAction.Raise(context.MoneyLeft);
+				}
+			}
+			else
+			{
+				playHand = HandStrengthValuation.PreFlopNormal(this.FirstCard, this.SecondCard);
 			}
 
+
+			// podredi
+			if (playHand == CardValuationType.Unplayable)
+			{
+				if (context.CanCheck)
+				{
+					return PlayerAction.CheckOrCall();
+				}
+				else
+				{
+					return PlayerAction.Fold();
+				}
+			}
+			else if (playHand == CardValuationType.Playable)
+			{
+				return PlayerAction.Raise(3 * context.SmallBlind);
+			}
+			else if (playHand == CardValuationType.BesthHand)
+			{
+				
+			}
+
+			return PlayerAction.CheckOrCall();
+		}
+
+		private PlayerAction FlopAction(GetTurnContext context)
+		{
+			return PlayerAction.CheckOrCall();
+		}
+
+		private PlayerAction TurnAction(GetTurnContext context)
+		{
+			return PlayerAction.CheckOrCall();
+		}
+
+		private PlayerAction RiverAction(GetTurnContext context)
+		{
 			return PlayerAction.CheckOrCall();
 		}
 
