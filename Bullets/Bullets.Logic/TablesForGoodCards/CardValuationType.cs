@@ -4,6 +4,6 @@
 	{
 		Unplayable = 0,
 		Playable = 1,
-		BesthHand = 2,
+		BestHand = 2, // AA, KK
 	}
 }

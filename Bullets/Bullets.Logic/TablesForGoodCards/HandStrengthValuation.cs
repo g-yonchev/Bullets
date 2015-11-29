@@ -74,7 +74,7 @@ namespace Bullets.Logic.TablesForGoodCards
 				case 1:
 					return CardValuationType.Playable;
 				case 2:
-					return CardValuationType.BesthHand;
+					return CardValuationType.BestHand;
 				default:
 					return CardValuationType.Unplayable;
 			}
@@ -97,7 +97,7 @@ namespace Bullets.Logic.TablesForGoodCards
 				case 1:
 					return CardValuationType.Playable;
 				case 2:
-					return CardValuationType.BesthHand;
+					return CardValuationType.BestHand;
 				default:
 					return CardValuationType.Unplayable;
 			}
@@ -120,7 +120,7 @@ namespace Bullets.Logic.TablesForGoodCards
 				case 1:
 					return CardValuationType.Playable;
 				case 2:
-					return CardValuationType.BesthHand;
+					return CardValuationType.BestHand;
 				default:
 					return CardValuationType.Unplayable;
 			}
