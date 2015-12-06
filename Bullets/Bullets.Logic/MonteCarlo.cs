@@ -9,13 +9,14 @@
 
     internal class MonteCarlo : IMonteCarlo
     {
-        private const float SimulationsCount = 10000f;
+        private const float SimulationsCount = 50f;
 
         public float CalculateWinningChance(
-            IList<Card> playerCards,
+            Card firstCard,
+            Card secondCard,
             IReadOnlyCollection<Card> communityCards)
         {
-            var deck = this.GetDeck(playerCards, communityCards);
+            var deck = this.GetDeck(firstCard, secondCard, communityCards);
 
             int cardStrengthResult = 0;
 
@@ -31,7 +32,10 @@
                     currentCommunityCards.Add(currentDeck.Pop());
                 }
 
-                var myHand = playerCards.Concat(currentCommunityCards);
+                var myHand = currentCommunityCards.ToList();
+                myHand.Add(firstCard);
+                myHand.Add(secondCard);
+
                 var opponentHand = opponentCards.Concat(currentCommunityCards);
 
                 int currentCardStrengthResult = Helpers.CompareCards(myHand, opponentHand);
@@ -39,20 +43,20 @@
                 cardStrengthResult += currentCardStrengthResult;
             }
 
-            float result = cardStrengthResult / SimulationsCount;
+            float result = 100 * (cardStrengthResult + SimulationsCount) / (2 * SimulationsCount);
 
             return result;
         }
 
         private IList<Card> GetDeck(
-            IList<Card> playerCards,
+            Card firstCard,
+            Card secondCard,
             IReadOnlyCollection<Card> communityCards)
         {
-            var deck = Deck.AllCards;
-            foreach (var playerCard in playerCards)
-            {
-                deck.Remove(playerCard);
-            }
+            var deck = Deck.AllCards.ToList();
+
+            deck.Remove(firstCard);
+            deck.Remove(secondCard);
 
             foreach (var communityCard in communityCards)
             {

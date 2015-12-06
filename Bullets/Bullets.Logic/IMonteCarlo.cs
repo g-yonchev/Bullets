@@ -5,6 +5,6 @@
 
     internal interface IMonteCarlo
     {
-        float CalculateWinningChance(IList<Card> playerCards, IReadOnlyCollection<Card> communityCards);
+        float CalculateWinningChance(Card firstCard, Card secondCard, IReadOnlyCollection<Card> communityCards);
     }
 }
