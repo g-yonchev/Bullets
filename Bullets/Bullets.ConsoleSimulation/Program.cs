@@ -10,9 +10,31 @@
 		public static void Main(string[] args)
 		{
 			// boi po smart playera :D
-			SimulateGames(new BulletsVsSmartSimulator());
 			SimulateGames(new BulletsVsDummySimulator());
-			SimulateGames(new BulletsVsAlwaysCallSimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			SimulateGames(new BulletsVsDummySimulator());
+			Console.WriteLine();
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+			SimulateGames(new BulletsVsSmartSimulator());
+
 		}
 
 		private static void SimulateGames(IGameSimulator gameSimulator)
