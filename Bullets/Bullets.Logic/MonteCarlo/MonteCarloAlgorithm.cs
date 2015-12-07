@@ -10,7 +10,7 @@
     internal class MonteCarloAlgorithm : IMonteCarlo
     {
         private const float SimulationsCount = 50f;
-		private const int MaxCountCommunitiCards = 5;
+		private const int MaxCountCommunityCards = 5;
 
         public float CalculateWinningChance(Card playerFirstCard, Card playerSecondCard, IReadOnlyCollection<Card> communityCards)
         {
@@ -25,7 +25,7 @@
                 IList<Card> opponentCards = new List<Card> { currentDeck.Pop(), currentDeck.Pop() };
 
                 var currentCommunityCards = communityCards.ToList();
-                while (currentCommunityCards.Count < MaxCountCommunitiCards)
+                while (currentCommunityCards.Count < MaxCountCommunityCards)
                 {
                     currentCommunityCards.Add(currentDeck.Pop());
                 }
