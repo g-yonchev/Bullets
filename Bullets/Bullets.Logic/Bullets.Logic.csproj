@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulletsPlayer.cs" />
+    <Compile Include="HackerPlayer.cs" />
     <Compile Include="MonteCarlo\IMonteCarlo.cs" />
     <Compile Include="MonteCarlo\MonteCarloAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
