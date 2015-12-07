@@ -125,11 +125,13 @@
                 {
                     var previousRoundActions = context.PreviousRoundActions.ToList();
 
+					// opponent had an action
                     if (!previousRoundActions[previousRoundActions.Count - 1].PlayerName.Contains(this.Name))
                     {
-                        // opponent had raise
+                        // opponent made a raise
                         if (previousRoundActions[previousRoundActions.Count - 1].Action.Type == PlayerActionType.Raise)
                         {
+							// 10% to call
                             if (context.MoneyToCall <= context.MoneyLeft * 0.1m)
                             {
                                 return PlayerAction.CheckOrCall();
@@ -175,7 +177,8 @@
                 {
                     var previousRoundActions = context.PreviousRoundActions.ToList();
 
-                    if (!previousRoundActions[previousRoundActions.Count - 1].PlayerName.Contains(this.Name))
+					// opponent had an action
+					if (!previousRoundActions[previousRoundActions.Count - 1].PlayerName.Contains(this.Name))
                     {
                         // opponent had raise
                         if (previousRoundActions[previousRoundActions.Count - 1].Action.Type == PlayerActionType.Raise)
@@ -213,15 +216,12 @@
                     {
                         return PlayerAction.Raise(context.MoneyToCall * 3);
                     }
-
-
                 }
 
                 throw new NotImplementedException("Somewhere there is missing logic");
-
             }
-            throw new NotImplementedException("Somewhere there is missing logic");
 
+            throw new NotImplementedException("Somewhere there is missing logic");
         }
 
         private PlayerAction FlopAction(GetTurnContext context)
@@ -322,8 +322,6 @@
             }
 
             return PlayerAction.Raise(context.MoneyLeft + 1);
-
-
         }
 
         private PlayerAction TurnAction(GetTurnContext context)
