@@ -1,10 +1,10 @@
-﻿namespace Bullets.ConsoleSimulation.GameSimulators
+﻿using TexasHoldem.Logic.GameMechanics;
+using TexasHoldem.Logic.Players;
+
+namespace Bullets.ConsoleSimulation.GameSimulators
 {
 	using System;
 	using System.Diagnostics;
-
-	using TexasHoldem.Logic.GameMechanics;
-	using TexasHoldem.Logic.Players;
 
 	public abstract class BaseGameSimulator : IGameSimulator
 	{
@@ -23,7 +23,7 @@
 			//// TODO: Parallel.For(1, numberOfGames + 1, i =>
 			for (var i = 1; i < numberOfGames + 1; i++)
 			{
-				if (i % 1 == 0)
+				if (i % 100 == 0)
 				{
 					Console.Write(".");
 				}
