@@ -57,6 +57,7 @@
     <Compile Include="GameSimulators\Battles\BulletsVsAlwaysCallSimulator.cs" />
     <Compile Include="GameSimulators\Battles\BulletsVsAlwaysFoldSimulator.cs" />
     <Compile Include="GameSimulators\Battles\BulletsVsDummySimulator.cs" />
+    <Compile Include="GameSimulators\Battles\BulletsVsHackerSimulator.cs" />
     <Compile Include="GameSimulators\Battles\BulletsVsSmartSimulator.cs" />
     <Compile Include="GameSimulators\Battles\SmartVsAlwaysCallSimulator.cs" />
     <Compile Include="GameSimulators\Battles\SmartVsDummySimulator.cs" />

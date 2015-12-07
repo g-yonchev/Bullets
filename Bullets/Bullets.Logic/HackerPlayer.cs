@@ -122,7 +122,12 @@
                 }
             }
 
-            return context.RoundType == GameRoundType.River ? PlayerAction.Fold() : PlayerAction.CheckOrCall();
+            if (context.CanCheck)
+            {
+                return PlayerAction.CheckOrCall();
+            }
+
+            return PlayerAction.Fold();
         }
     }
 }

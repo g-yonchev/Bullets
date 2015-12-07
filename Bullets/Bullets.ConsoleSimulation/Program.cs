@@ -9,14 +9,14 @@
 	{
 		public static void Main(string[] args)
 		{
-			SimulateGames(new BulletsVsSmartSimulator());
             SimulateGames(new BulletsVsSmartSimulator());
             SimulateGames(new BulletsVsSmartSimulator());
             SimulateGames(new BulletsVsSmartSimulator());
-            SimulateGames(new BulletsVsSmartSimulator());
-            SimulateGames(new BulletsVsSmartSimulator());
-            SimulateGames(new BulletsVsSmartSimulator());
-		}
+		    Console.WriteLine();
+            SimulateGames(new BulletsVsHackerSimulator());
+            SimulateGames(new BulletsVsHackerSimulator());
+            SimulateGames(new BulletsVsHackerSimulator());
+        }
 
 		private static void SimulateGames(IGameSimulator gameSimulator)
 		{
