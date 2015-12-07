@@ -1,10 +1,10 @@
-﻿using TexasHoldem.Logic.GameMechanics;
-using TexasHoldem.Logic.Players;
-
-namespace Bullets.ConsoleSimulation.GameSimulators
+﻿namespace Bullets.ConsoleSimulation.GameSimulators
 {
 	using System;
 	using System.Diagnostics;
+
+	using TexasHoldem.Logic.GameMechanics;
+	using TexasHoldem.Logic.Players;
 
 	public abstract class BaseGameSimulator : IGameSimulator
 	{

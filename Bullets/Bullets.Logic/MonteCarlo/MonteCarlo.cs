@@ -1,4 +1,4 @@
-﻿namespace Bullets.Logic
+﻿namespace Bullets.Logic.MonteCarlo
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -7,16 +7,14 @@
     using TexasHoldem.Logic.Extensions;
     using TexasHoldem.Logic.Helpers;
 
-    internal class MonteCarlo : IMonteCarlo
+    internal class MonteCarloAlgorithm : IMonteCarlo
     {
         private const float SimulationsCount = 50f;
+		private const int MaxCountCommunitiCards = 5;
 
-        public float CalculateWinningChance(
-            Card firstCard,
-            Card secondCard,
-            IReadOnlyCollection<Card> communityCards)
+        public float CalculateWinningChance(Card playerFirstCard, Card playerSecondCard, IReadOnlyCollection<Card> communityCards)
         {
-            var deck = this.GetDeck(firstCard, secondCard, communityCards);
+            IList<Card> deck = this.GetDeck(playerFirstCard, playerSecondCard, communityCards);
 
             int cardStrengthResult = 0;
 
@@ -27,31 +25,26 @@
                 IList<Card> opponentCards = new List<Card> { currentDeck.Pop(), currentDeck.Pop() };
 
                 var currentCommunityCards = communityCards.ToList();
-                while (currentCommunityCards.Count < 5)
+                while (currentCommunityCards.Count < MaxCountCommunitiCards)
                 {
                     currentCommunityCards.Add(currentDeck.Pop());
                 }
 
                 var myHand = currentCommunityCards.ToList();
-                myHand.Add(firstCard);
-                myHand.Add(secondCard);
+                myHand.Add(playerFirstCard);
+                myHand.Add(playerSecondCard);
 
                 var opponentHand = opponentCards.Concat(currentCommunityCards);
 
                 int currentCardStrengthResult = Helpers.CompareCards(myHand, opponentHand);
-
                 cardStrengthResult += currentCardStrengthResult;
             }
 
-            float result = 100 * (cardStrengthResult + SimulationsCount) / (2 * SimulationsCount);
-
+			float result = GetStrengthAsPercentage(cardStrengthResult, SimulationsCount);
             return result;
         }
 
-        private IList<Card> GetDeck(
-            Card firstCard,
-            Card secondCard,
-            IReadOnlyCollection<Card> communityCards)
+        private IList<Card> GetDeck(Card firstCard, Card secondCard, IReadOnlyCollection<Card> communityCards)
         {
             var deck = Deck.AllCards.ToList();
 
@@ -65,5 +58,11 @@
 
             return deck;
         }
+		
+		private float GetStrengthAsPercentage(int v1, float v2)
+		{
+			// magic
+			return 100 * (v1 + v2) / (2 * v2);
+		}
     }
 }

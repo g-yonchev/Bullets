@@ -1,4 +1,4 @@
-﻿namespace Bullets.Logic
+﻿namespace Bullets.Logic.MonteCarlo
 {
     using System.Collections.Generic;
     using TexasHoldem.Logic.Cards;

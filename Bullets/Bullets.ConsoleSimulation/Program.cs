@@ -9,8 +9,6 @@
 	{
 		public static void Main(string[] args)
 		{
-			// boi po smart playera :D
-			Console.WriteLine();
 			SimulateGames(new BulletsVsSmartSimulator());
             SimulateGames(new BulletsVsSmartSimulator());
             SimulateGames(new BulletsVsSmartSimulator());
@@ -18,7 +16,6 @@
             SimulateGames(new BulletsVsSmartSimulator());
             SimulateGames(new BulletsVsSmartSimulator());
             SimulateGames(new BulletsVsSmartSimulator());
-
 		}
 
 		private static void SimulateGames(IGameSimulator gameSimulator)

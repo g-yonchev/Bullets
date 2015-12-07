@@ -1,29 +1,31 @@
 ﻿namespace Bullets.Logic
 {
-    using TablesForGoodCards;
-    using EvaluationCriteriasPreFlop.EvaluationsWinnings;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using TexasHoldem.Logic;
-    using TexasHoldem.Logic.Helpers;
-    using TexasHoldem.Logic.Cards;
-    using TexasHoldem.Logic.Extensions;
-    using TexasHoldem.Logic.Players;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    public class BulletsPlayer : BasePlayer
+	using TexasHoldem.Logic;
+	using TexasHoldem.Logic.Helpers;
+	using TexasHoldem.Logic.Cards;
+	using TexasHoldem.Logic.Players;
+
+	using Bullets.Logic.CardValuation;
+	using MonteCarlo;
+
+	public class BulletsPlayer : BasePlayer
     {
-        private IMonteCarlo monteCarlo = new MonteCarlo();
+        private IMonteCarlo monteCarlo = new MonteCarloAlgorithm();
+
+		private float monteCarloChance = -1;
 
         public override string Name { get; } = $"BulletsPlayer_{Guid.NewGuid()}";
 
-        // logikata koqto e implementiral niki za igrata: pri vsqko pochvane na rund i dvata playera imat Raise(1..2...3.. increesing)
         public override PlayerAction GetTurn(GetTurnContext context)
         {
-            return this.SecondStrategy(context);
+            return this.BulletsStrategy(context);
         }
 
-        private PlayerAction SecondStrategy(GetTurnContext context)
+        private PlayerAction BulletsStrategy(GetTurnContext context)
         {
             var roundType = context.RoundType;
 
@@ -49,21 +51,20 @@
 
         private PlayerAction PreFlopAction(GetTurnContext context)
         {
-            CardValuationType playHand;
+            CardStrengthType playHand;
 
-            // promenliva koqto pazi dali nie sme bili purvi ( ima samo dva raise v actionite)
             bool isOurTurn = context.PreviousRoundActions.Count == 2;
 
             if (context.MoneyLeft <= 500)
             {
-                playHand = HandStrengthValuation.PreFlopNormal(this.FirstCard, this.SecondCard);
+                playHand = HandStrengthValuation.PreFlopHandStrengthValuation(this.FirstCard, this.SecondCard);
 
-                if (playHand == CardValuationType.BestHand)
+                if (playHand == CardStrengthType.BestHand)
                 {
                     return PlayerAction.Raise(context.MoneyLeft + 1);
                 }
 
-                if (playHand == CardValuationType.Playable)
+                if (playHand == CardStrengthType.Playable)
                 {
                     return PlayerAction.Raise(context.CurrentPot * 4);
                 }
@@ -71,24 +72,23 @@
             }
             else if (context.MoneyLeft >= 1500)
             {
-                playHand = HandStrengthValuation.PreFlopNormal(this.FirstCard, this.SecondCard);
+                playHand = HandStrengthValuation.PreFlopHandStrengthValuation(this.FirstCard, this.SecondCard);
 
-                if (playHand == CardValuationType.BestHand)
+                if (playHand == CardStrengthType.BestHand)
                 {
                     return PlayerAction.Raise(context.MoneyLeft + 1);
                 }
 
-                if (playHand == CardValuationType.Playable)
+                if (playHand == CardStrengthType.Playable)
                 {
                     return PlayerAction.Raise(context.CurrentPot * 4);
                 }
             }
             else
             {
-                playHand = HandStrengthValuation.PreFlopNormal(this.FirstCard, this.SecondCard);
+                playHand = HandStrengthValuation.PreFlopHandStrengthValuation(this.FirstCard, this.SecondCard);
             }
-
-
+			
             if (context.SmallBlind <= 250)
             {
                 if (context.CanCheck)
@@ -100,9 +100,8 @@
                     return PlayerAction.CheckOrCall();
                 }
             }
-
-            // podredi
-            if (playHand == CardValuationType.Unplayable)
+			
+            if (playHand == CardStrengthType.Unplayable)
             {
                 if (context.CanCheck)
                 {
@@ -115,7 +114,7 @@
 
                 throw new NotImplementedException("Somewhere there is missing logic");
             }
-            else if (playHand == CardValuationType.Playable)
+            else if (playHand == CardStrengthType.Playable)
             {
                 if (isOurTurn)
                 {
@@ -165,7 +164,7 @@
 
                 throw new NotImplementedException("Somewhere there is missing logic");
             }
-            else if (playHand == CardValuationType.BestHand)
+            else if (playHand == CardStrengthType.BestHand)
             {
                 if (isOurTurn)
                 {
@@ -198,7 +197,7 @@
                                 return PlayerAction.CheckOrCall();
                             }
 
-                            if (context.MoneyToCall <= context.MoneyLeft * 0.1m)
+                            if (context.MoneyToCall <= context.MoneyLeft * 0.15m)
                             {
                                 return PlayerAction.CheckOrCall();
                             }
@@ -227,11 +226,8 @@
 
         private PlayerAction FlopAction(GetTurnContext context)
         {
-            var chance = monteCarlo.CalculateWinningChance(
-                this.FirstCard,
-                this.SecondCard,
-                this.CommunityCards);
-
+			float chance = monteCarlo.CalculateWinningChance(this.FirstCard, this.SecondCard, this.CommunityCards);
+			
             if (context.MoneyLeft < 500)
             {
                 return this.MonteCarloLessThan500(chance, context);
@@ -243,66 +239,6 @@
             }
 
             return this.MonteCarloNormal(chance, context);
-
-            
-            //var cards = new List<Card>(this.CommunityCards);
-            //cards.Add(this.FirstCard);
-            //cards.Add(this.SecondCard);
-            //var hand = Helpers.GetHandRank(cards);
-
-            //if (hand == HandRankType.StraightFlush)
-            //{
-            //    return PlayerAction.Raise(context.MoneyLeft + 1);
-            //}
-            //if (hand == HandRankType.FourOfAKind)
-            //{
-            //    return PlayerAction.Raise(context.MoneyLeft + 1);
-            //}
-            //if (hand == HandRankType.FullHouse)
-            //{
-            //    return PlayerAction.Raise(context.MoneyLeft + 1);
-
-            //}
-            //if (hand == HandRankType.Flush)
-            //{
-            //    return PlayerAction.Raise(context.MoneyLeft + 1);
-
-            //}
-            //if (hand == HandRankType.Straight)
-            //{
-            //    return PlayerAction.Raise(context.MoneyLeft + 1);
-            //}
-            //if (hand == HandRankType.ThreeOfAKind)
-            //{
-            //    int bet = (int)Math.Round(0.90 * context.CurrentPot);
-            //    return PlayerAction.Raise(bet);
-
-            //}
-            //if (hand == HandRankType.TwoPairs)
-            //{
-            //    int bet = (int)Math.Round(0.80 * context.CurrentPot);
-            //    return PlayerAction.Raise(bet);
-            //}
-
-            //if (hand == HandRankType.Pair)
-            //{
-            //    int bet = (int)Math.Round(0.66 * context.CurrentPot);
-            //    return PlayerAction.Raise(bet);
-            //}
-
-            //if (hand == HandRankType.HighCard)
-            //{
-            //    if (context.CanCheck)
-            //    {
-            //        return PlayerAction.CheckOrCall();
-            //    }
-            //    else
-            //    {
-            //        return PlayerAction.Fold();
-            //    }
-            //}
-
-            //throw new NotImplementedException("Missing in the logic");
         }
 
         private PlayerAction MonteCarloLessThan500(float chance, GetTurnContext context)
@@ -515,74 +451,5 @@
 
             throw new NotImplementedException("Missing in the logic");
         }
-
-        //private PlayerAction NomalStrategy(GetTurnContext context)
-        //{
-        //	if (context.RoundType == GameRoundType.PreFlop)
-        //	{
-        //		// this is first playing in the round. Each player starts with one Raise(1..2...3.. increesing)
-        //		// and this logic and tables are from EvaluationAfterNoAction
-        //		if (context.PreviousRoundActions.Count == 2)
-        //		{
-        //			// this is returned random number
-        //			var rand = RandomProvider.Next(1, 10001);
-
-        //			// this is randomizied percentage
-        //			var randFloat = rand / (float)10000;
-
-
-        //			// this is percentage from the table.
-        //			var raisePercentage = EvaluationAfterNoAction.RaisePercentage(this.FirstCard, this.SecondCard);
-
-        //			if (randFloat <= raisePercentage)
-        //			{
-
-        //				var raiseValue = (int)(raisePercentage + 1);
-        //				//var raiseValue = 1;
-        //				return PlayerAction.Raise(3);
-        //			}
-
-        //			var callPercentage = EvaluationAfterNoAction.CallPercentage(this.FirstCard, this.SecondCard);
-
-        //			if (randFloat <= callPercentage)
-        //			{
-        //				return PlayerAction.CheckOrCall();
-        //			}
-
-        //			return PlayerAction.Fold();
-        //		}
-
-
-        //		var isCall = context.PreviousRoundActions.ToList().Any(a => !a.PlayerName.Contains("Bullets") && a.Action.Type == PlayerActionType.CheckCall);
-
-        //		if (isCall)
-        //		{
-        //			// this is coeficient from the tables
-        //			var raisePerc = EvaluationAfterOpponentsCall.RaisePercentage(this.FirstCard, this.SecondCard);
-
-        //			// this is returned random number
-        //			var rand = RandomProvider.Next(1, 10001);
-
-        //			// this is randomizied coeficient
-        //			var randFloat = rand / (float)10000;
-
-        //			var winningPercentage = EvaluationWinning.WinningPercentage(this.FirstCard, this.SecondCard);
-
-        //			if (randFloat <= raisePerc)
-        //			{
-        //				var raiseValue = (int)(Math.Round(winningPercentage * RandomProvider.Next(20, 51)));
-        //				return PlayerAction.Raise(raiseValue);
-        //			}
-        //			else
-        //			{
-
-        //				return PlayerAction.CheckOrCall();
-        //			}
-        //		}
-        //	}
-
-        //	return PlayerAction.CheckOrCall();
-        //}
-
     }
 }

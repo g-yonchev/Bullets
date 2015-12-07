@@ -49,15 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulletsPlayer.cs" />
-    <Compile Include="EvaluationCriteriasPreFlop\EvaluationsActions\EvaluationAfterNoAction.cs" />
-    <Compile Include="EvaluationCriteriasPreFlop\EvaluationsActions\EvaluationAfterOpponentsCall.cs" />
-    <Compile Include="EvaluationCriteriasPreFlop\EvaluationsWinnings\EvaluationWinning.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="IMonteCarlo.cs" />
-    <Compile Include="MonteCarlo.cs" />
+    <Compile Include="MonteCarlo\IMonteCarlo.cs" />
+    <Compile Include="MonteCarlo\MonteCarlo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TablesForGoodCards\CardValuationType.cs" />
-    <Compile Include="TablesForGoodCards\HandStrengthValuation.cs" />
+    <Compile Include="Helper\CardStrengthType.cs" />
+    <Compile Include="Helper\HandStrengthValuation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
