@@ -2,9 +2,11 @@
 
 ### TexasHoldemGameAI
 
-The AI logic is divided in two parts. One for the preflop part of the game and another for the rest of the game.
+The AI logic is divided in two parts. One for the preflop part of the game and another one - Monte Carlo method for the rest of the game.
 
 #### Preflop
+
+We evaluate our cards from 0 to 2 according to this table:
 
 | AA | AKs | AQs | AJs | ATs | A9s | A8s | A7s | A6s | A5s | A4s | A3s | A2s |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -57,3 +59,13 @@ The AI logic is divided in two parts. One for the preflop part of the game and a
 | A2o | K2o | Q2o | J2o | T2o | 92o | 82o | 72o | 62o | 52o | 42o | 32o | 22 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+Then we check how much money we have. If our money are less than 500 or more than 1500 if our cards are evaluated as 2 we are playing all in. Otherwise (our money are between 500 and 1500) we raise the amount of the pot times 4.
+
+If our cards are evaluated as 0 we check or call if possible. Otherwise we fall.
+
+If our cards are evaluated as 1 we ckeck or call.
+
+#### Flop, Turn, River (Monte Carlo algorithm)
+
+We create a deck of cards containing all cards without ours and the community cards. Then we use this deck to make 30 (or more) simulations for each turn of the player. If it wins in less than 33 percent of the simulations, the player checks or folds. If it wins between 33 and 66 percent it checks or calls, if it wins more it raises the current pot once and if it wins in more than 90 percent it raises with all the money.
